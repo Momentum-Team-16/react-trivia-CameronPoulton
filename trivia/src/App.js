@@ -1,6 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import he from "he"
 
 function App() {
   return (
@@ -21,39 +22,42 @@ function Category() {
   const [selectedCat, setSelectedCat] = useState("")
   if (selectedCat) {
     console.log(selectedCat)
-    // return <CatQuestion />
+    return <CatQuestion selectedCat={selectedCat}/>
   }
-
   return (
     <section>
       <header>
-        <h1>Trivia</h1>
+        <h1>React Trivia</h1>
       </header>
-
-      <div className="category-list">
         <ul className="category-grid">
           {categories.map((categories) => (
             <li
-              onClick={() => setSelectedCat(categories.name)}
+              onClick={() => setSelectedCat(categories.id)}
               className="category" key={categories.id}>{categories.name}
             </li>
           ))}
         </ul>
-      </div>
     </section>
   );
 }
-
-// function CatQuestion(selectedCat) {
-//   const [question, setQuestion] = useState([])
-//   useEffect(() => {
-//     axios
-//       .get(
-//         `https://opentdb.com/api.php?amount=10`)
-//       .then((response) => {setQuestion(response.data.results.map(obj => [obj.question, obj.incorrect_answer, obj.correct_answer]))
-//       })
-//   }, [selectedCat]);
-
-
-// }
+function CatQuestion({ selectedCat }) {
+  const [question, setQuestion] = useState([])
+  useEffect(() => {
+    axios
+      .get(
+        `https://opentdb.com/api.php?amount=1&category=${selectedCat}`)
+      .then((response) => {setQuestion(response.data.results)
+    })
+  }, [selectedCat])
+  console.log(question)
+return (
+  <section className="question">
+    {question.map((questObj) => (
+      <div key={selectedCat}>
+        <p>{he.decode(questObj.question)}</p>
+      </div>
+    ))}
+  </section>
+)
+}
 export default App;

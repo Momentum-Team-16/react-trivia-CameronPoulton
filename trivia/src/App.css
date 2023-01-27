@@ -1,18 +1,14 @@
-.category-grid {
-  display: grid;
-  grid-template-rows: repeat(4,1fr);
-  grid-template-columns: repeat(4,1fr);
+.h1 {
+  border-color: aqua;
+  border: solid 4px blue;
 }
+
 .category {
-  
-  list-style: none;
   text-align: center;
-  vertical-align: center;
   justify-content: center;
   border: solid 1px silver;
   padding: 5px;
   margin: 5px;
-  min-height: 2rem;
 }
 
 .trivia-question {
@@ -21,6 +17,11 @@
 
 .questions {
   display: grid;
-  grid-template-rows: repeat(2,1fr);
-  grid-template-columns: repeat(2,1fr);
+  grid-template-rows: repeat(10,5fr);
+  grid-template-columns: repeat(4,5fr);
+}
+.category-grid {
+  display: grid;
+  grid-template-rows: repeat(10,5fr);
+  grid-template-columns: repeat(4,5fr);
 }
