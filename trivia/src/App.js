@@ -22,7 +22,6 @@ function Category() {
 
   const [selectedCat, setSelectedCat] = useState("");
   if (selectedCat) {
-    console.log(selectedCat);
     return <CatQuestion selectedCat={selectedCat} />;
   }
   return (
@@ -30,25 +29,26 @@ function Category() {
       <h1>React Trivia</h1>
       <ul className="category-grid">
         {categories.map((categories) => (
-          <li
-            onClick={() => setSelectedCat(categories.id)}
+          <li onClick={() => setSelectedCat(categories.id)}
             className="category"
-            key={categories.id}
-          >
-            {categories.name}
+            key={categories.id}>{categories.name}
           </li>
         ))}
       </ul>
     </section>
   );
 }
-function CatQuestion({ selectedCat }) {
-  const [question, setQuestion] = useState([]);
-  const [answer, setAnswer] = useState("");
+
+function CatQuestion({ selectedCat, setSelectedCat }) {
+  const [question, setQuestion] = useState([])
+  const [answer, setAnswer] = useState("")
+  const [index, setIndex] = useState(0)
+
   useEffect(() => {
     axios
-      .get(`https://opentdb.com/api.php?amount=1&category=${selectedCat}`)
+      .get(`https://opentdb.com/api.php?amount=5&category=${selectedCat}`)
       .then((response) => {
+
         setQuestion(
           response.data.results.map((obj) => ({
             question: he.decode(obj.question),
@@ -61,21 +61,41 @@ function CatQuestion({ selectedCat }) {
         );
       });
   }, [selectedCat]);
+
   return (
-    <div className="question">
-      {question.map((questObj) => (
-        <div key={selectedCat}>
-          <p>{he.decode(questObj.question)}</p>
-          <ul className="questions">
-            {questObj.answerChoice.map((answerObj) => (
-              <li onClick={() => setAnswer(he.decode(answerObj))} className="category">
-                {he.decode(answerObj)}
+    question.length > 0 && (
+      <Question question={question} index={index} setIndex={setIndex} setSelectedCat={setSelectedCat}/>
+    )
+  )
+
+  function Question({ question, index, setIndex, }) {
+    
+    function handleClick() {
+      if (answer === question[index].correct_answer) {
+        console.log("correct")
+      }
+      // if (answer === question[index].incorrect_answers)
+      //   console.log("you suck")
+      // setIndex(index+1)
+      }
+      return (
+        <section className="question">
+          <h1 key={index}>
+            
+              {question[index].question}
+            </h1>
+
+          <ul className="answers"> 
+            {question[index].answerChoice.map((answer) => (
+              <li onClick={() => setAnswer(he.decode(answer))} key={answer}>
+                {he.decode(answer)}
               </li>
+
             ))}
           </ul>
-        </div>
-      ))}
-    </div>
-  );
+            <button onClick={() => handleClick()}>Check Answer</button> 
+          
+        </section>
+  )}
 }
-export default App;
+  export default App;
